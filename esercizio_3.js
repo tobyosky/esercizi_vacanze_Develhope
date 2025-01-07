@@ -12,13 +12,13 @@ const sales = [
 Nello specifico inserisce in un oggetto vuoto (groupedSales), suddividendo in array in base alla categoria, le varie vendite che sono presenti nell'array di partenza
 sales e poi, dopo un 1 secondo, chiama la callback calcolaStatistiche*/
 function raggruppaVendite(sales, callback) {
-  const groupedSales = sales.reduce((acc, { category, amount, number }) => {
-    if (!acc[category]) {
-      acc[category] = [];
+  const groupedSales = {};
+  sales.forEach(({ category, amount, number }) => {
+    if (!groupedSales[category]) {
+      groupedSales[category] = [];
     }
-    acc[category].push({ amount, number });
-    return acc;
-  }, {});
+    groupedSales[category].push({ amount, number });
+  });
 
   console.log("Dati raggruppati per categoria:", groupedSales);
   setTimeout(() => callback(groupedSales), 1000);
@@ -38,9 +38,9 @@ function calcolaStatistiche(groupedSales, callback) {
       0
     );
     salesStatistics.push({
-      Categoria: category,
-      Guadagni: totalAmount,
-      Quantita: totalNumber,
+      categoria: category,
+      guadagni: totalAmount,
+      quantita: totalNumber,
     });
   }
 
@@ -51,7 +51,7 @@ function calcolaStatistiche(groupedSales, callback) {
 /* La funzione filtraCategorie utilizza il metodo filter per filtrare i guadagni delle categorie salvando il tutto nella variabile salesFilter. A sua volta chiama una
 callback dopo un secondo che stampa nel terminale salesFilter */
 function filtraCategorie(salesStatistics, callback) {
-  const salesFilter = salesStatistics.filter((sale) => sale.Guadagni >= 80000);
+  const salesFilter = salesStatistics.filter((sale) => sale.guadagni >= 80000);
 
   setTimeout(() => callback(salesFilter), 1000);
 }
